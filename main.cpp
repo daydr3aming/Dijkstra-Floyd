@@ -51,9 +51,9 @@ void dijkstra(vector<vector<int>>& adjmatrix, vector<int>& dist, int src){
 
 
 // Algoritmo de Floyd - Complejidad: O(V^3)
-vector<vector<int>> floyd(const vector<vector<int>>& graph){
-    int n = graph.size();
-    vector<vector<int>> distance(n, vector<int>(n, INF)); // Creamos el vector de vectores (matriz) que tendra las distancias 
+vector<vector<int>> floyd(const vector<vector<int>>& grafo){
+    int n = grafo.size();
+    vector<vector<int>> vecDistancia(n, vector<int>(n, INF)); // Creamos el vector de vectores (matriz) que tendra las distancias 
     // y lo inicializamos todo con infinito
 
     // Aqui la inicializamos con los primeros valores del grafo y ponemos en 0 la diagonal con sus mismos numeros
@@ -61,13 +61,13 @@ vector<vector<int>> floyd(const vector<vector<int>>& graph){
     for(int i=0; i<n; ++i){
         for(int j=0; j<n; ++j){
             if(i == j){
-                distance[i][j] = 0;
+                vecDistancia[i][j] = 0;
             }
-            else if(graph[i][j]<0){
-                distance[i][j] = INF;
+            else if(grafo[i][j]<0){
+                vecDistancia[i][j] = INF;
             }
-            else if(graph[i][j] != 0){
-                distance[i][j] = graph[i][j];
+            else if(grafo[i][j] != 0){
+                vecDistancia[i][j] = grafo[i][j];
             }
             
         }
@@ -82,10 +82,10 @@ vector<vector<int>> floyd(const vector<vector<int>>& graph){
 
             for(int j=0; j<n; ++j){
 
-                    if(distance[i][k] != INF && distance[k][j] != INF){ // Checamos que lo que vamos a revisar no sean infinitos
+                    if(vecDistancia[i][k] != INF && vecDistancia[k][j] != INF){ // Checamos que lo que vamos a revisar no sean infinitos
                     // si no, se quedan igual
 
-                        distance[i][j] = min(distance[i][j], distance[i][k] + distance[k][j]);
+                        vecDistancia[i][j] = min(vecDistancia[i][j], vecDistancia[i][k] + vecDistancia[k][j]);
 
                         // Realizamos la comparacion para encontrar el valor minimo
                     }
@@ -95,7 +95,7 @@ vector<vector<int>> floyd(const vector<vector<int>>& graph){
     }
 
 
-    return distance;
+    return vecDistancia;
 }
 
 
