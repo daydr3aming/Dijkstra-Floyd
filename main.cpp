@@ -2,6 +2,7 @@
 #include <string>
 #include <queue>
 #include <vector>
+#include <cmath>
 
 // Actividad 3.2 Implementación de "Dijkstra and Floyd"
 // Rogelio Guzman Cruzado - A01639914
@@ -10,7 +11,7 @@
 using namespace std;
 
 
-const int INF = 200;
+const int INF = pow(10, 9); // Numero muy grande, porque hay problemas con INT_MAX.
 
 // Funcion de relajacion, actualiza la distancia de un nodo a otro nodo
 void relax(vector<vector<int>>& adjmatrix, vector<int>& dist, int u, int v) {
@@ -19,12 +20,14 @@ void relax(vector<vector<int>>& adjmatrix, vector<int>& dist, int u, int v) {
     }
 }
 
-void dijkstra(vector<vector<int>>& adjmatrix, vector<int>& dist, int src){
+// Algoritmo de Dijkstra - Complejidad: O(V log V + E)
+void dijkstra(vector<vector<int>>& adjmatrix, vector<int>& dist, int src){ 
     int n = adjmatrix.size();
     vector<bool> visited(n, false);
 
-    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
-    
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq; // min heap
+    // Complejidad disminuye a O(V log V + E) gracias a pq
+
     dist[src] = 0;
     pq.push(make_pair(0, src));
 
@@ -47,13 +50,11 @@ void dijkstra(vector<vector<int>>& adjmatrix, vector<int>& dist, int src){
 }
 
 
-
+// Algoritmo de Floyd - Complejidad: O(V^3)
 vector<vector<int>> floyd(const vector<vector<int>>& graph){
     int n = graph.size();
     vector<vector<int>> distance(n, vector<int>(n, INF)); // Creamos el vector de vectores (matriz) que tendra las distancias 
-    // y lo inicializamos todo con numeros max para llenarla en un principio
-
-
+    // y lo inicializamos todo con infinito
 
     // Aqui la inicializamos con los primeros valores del grafo y ponemos en 0 la diagonal con sus mismos numeros
 
@@ -105,7 +106,7 @@ int main() {
     vector<vector<int>> distanceFloyd(n, vector<int>(n));
 
 
-    // Agregamos los valores a las matrices
+    // Inicializamos las matrices
     for(int i = 0; i < n; i++){
         for(int j = 0; j < n; j++){
             int num;
@@ -116,19 +117,19 @@ int main() {
     }
 
 
-    vector<vector<int>> distances = floyd(distanceFloyd); // Llamamos la funcion de floyd
+    vector<vector<int>> distances = floyd(distanceFloyd); // Floyd
 
     // Cambiamos el nodo source para hacer dijkstra entre todos los nodos
     for(int src = 0; src < n; src++){
         vector<int> dist(n, INT_MAX);
-        dijkstra(adjmatrix, dist, src);
+        dijkstra(adjmatrix, dist, src); // Dijkstra para cada nodo
         for(int i = 0; i < n; i++){
             cout << "Node " << src + 1 << " to node " << i + 1 << " : " << dist[i] << endl;
         }
         cout << endl;
     }
 
-    // Imprimimos el vector que nos regresa con las distancias de Floyd
+    // Imprimimos las distancias de Floyd
 
     for(int i=0; i < n; ++i){
         for(int j =0; j<n; ++j){
